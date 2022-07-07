@@ -1,19 +1,28 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { getMovies } from '../functions/getMovies';
+import { useMovieContext } from '../context/movieContext';
+import { StateActions } from '../context/movieActions';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-interface InputValues {
+export interface InputValues {
   movieName: string;
   movieYear: string;
 }
 
-const SearchForm = () => {
+const SearchForm: React.FC = () => {
+  const [movie, setMovie] = useState<any>(null);
   const [values, setValues] = useState<InputValues>({
     movieName: '',
     movieYear: '',
   });
+
+  const navigate = useNavigate();
+
+  const { dispatch } = useMovieContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
@@ -22,10 +31,23 @@ const SearchForm = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log('submit');
+    const movie = await getMovies(values);
+    setMovie(movie);
+    dispatch({
+      type: StateActions.GET_MOVIE,
+      payload: {
+        movie: movie,
+      },
+    });
+    navigate('/moviePage');
+    setValues({
+      movieName: '',
+      movieYear: '',
+    });
   };
+
   return (
     <Form className="container w-50 border border-rounded border-secondary m-5 p-5">
       <h1 className="text-light m-2 mb-5">Search for a movie</h1>

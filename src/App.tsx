@@ -1,15 +1,27 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import SearchForm from './components/SearchForm';
+import MoviePage from './components/MoviePage';
 
-const App = () => {
+import { MovieProvider } from './context/movieContext';
+
+const App: React.FC = () => {
   return (
-    <div
-      className="bg-dark w-100"
-      style={{ height: '100vh', overflowX: 'hidden' }}
-    >
-      <Navbar />
-      <SearchForm />
-    </div>
+    <MovieProvider>
+      <BrowserRouter>
+        <div
+          className="bg-dark w-100"
+          style={{ height: '100vh', overflowX: 'hidden' }}
+        >
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<SearchForm />} />
+            <Route path="/moviePage" element={<MoviePage />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </MovieProvider>
   );
 };
 
