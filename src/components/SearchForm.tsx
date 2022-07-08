@@ -42,12 +42,24 @@ const SearchForm: React.FC = () => {
     }
 
     const movie = await getMovies(values);
-    dispatch({
-      type: StateActions.GET_MOVIE,
-      payload: {
-        movie: movie,
-      },
-    });
+    if (movie.Response === 'True') {
+      dispatch({
+        type: StateActions.GET_MOVIE,
+        payload: {
+          movie: movie,
+          error: null,
+        },
+      });
+    } else {
+      dispatch({
+        type: StateActions.GET_MOVIE,
+        payload: {
+          movie: null,
+          error: movie,
+        },
+      });
+    }
+
     navigate('/moviePage');
     setValues({
       movieName: '',

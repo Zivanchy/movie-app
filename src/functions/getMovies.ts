@@ -14,7 +14,7 @@ export const getMovies = async (parameters: InputValues) => {
       const movie = await response.data;
       return movie;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -25,6 +25,6 @@ export const getMovies = async (parameters: InputValues) => {
     const movie = await response.data;
     return movie;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
