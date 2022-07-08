@@ -10,12 +10,12 @@ interface InitialState {
 }
 
 const MovieContext = createContext<any | null>({
-  movie: {},
+  movie: null,
 });
 
 export const MovieProvider = ({ children }: Children) => {
   const initialState: InitialState = {
-    movie: {},
+    movie: null,
   };
   const [state, dispatch] = useReducer(MovieReducer, initialState);
 
