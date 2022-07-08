@@ -5,8 +5,7 @@ import { getMovies } from '../functions/getMovies';
 import { useMovieContext } from '../context/movieContext';
 import { StateActions } from '../context/movieActions';
 
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { Form, Button, Alert } from 'react-bootstrap';
 
 export interface InputValues {
   movieName: string;
@@ -14,7 +13,7 @@ export interface InputValues {
 }
 
 const SearchForm: React.FC = () => {
-  const [movie, setMovie] = useState<any>(null);
+  const [error, setError] = useState<boolean>(false);
   const [values, setValues] = useState<InputValues>({
     movieName: '',
     movieYear: '',
@@ -33,8 +32,16 @@ const SearchForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    if (values.movieName === '') {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 2000);
+      return;
+    }
+
     const movie = await getMovies(values);
-    setMovie(movie);
     dispatch({
       type: StateActions.GET_MOVIE,
       payload: {
@@ -71,6 +78,11 @@ const SearchForm: React.FC = () => {
       <Button className="btn-primary m-2" type="submit" onClick={handleSubmit}>
         Search
       </Button>
+      {error && (
+        <Alert className="m-2" variant="danger">
+          Please enter a movie name.
+        </Alert>
+      )}
     </Form>
   );
 };
