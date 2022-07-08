@@ -7,15 +7,18 @@ type Children = {
 
 interface InitialState {
   movie: any;
+  error: any;
 }
 
 const MovieContext = createContext<any | null>({
   movie: null,
+  error: null,
 });
 
 export const MovieProvider = ({ children }: Children) => {
   const initialState: InitialState = {
     movie: null,
+    error: null,
   };
   const [state, dispatch] = useReducer(MovieReducer, initialState);
 
